@@ -1,0 +1,156 @@
+<article class='upload-detail container'>
+  {{dig-bar queryParams=queryParams}}
+
+  <div class='track-header'>
+    <h2>
+      <a href='#' {{action 'togglePlay' model}} class='btn btn-default play'>
+        <span {{bind-attr class=":glyphicon model.isPlaying:glyphicon-pause:glyphicon-play"}}></span>
+      </a>
+      {{#if model.isLicenseReady}}
+        <a  class='buy-license pull-right'
+            title="Obtain Commercial License"
+            target='_new' href='{{unbound model.purchaseLicenseUrl}}'>
+          <img alt='ccPlus' src='http://tunetrack.net/media//img/cc-plus-tunetrack.png'/>
+        </a>
+      {{/if}}
+      <a class='license pull-right' target='_new' href='{{unbound model.content.license_url}}'>
+        <img
+          src="{{unbound model.licenseLogoUrl}}"
+          alt="{{unbound model.licenseName}}"
+          title="{{unbound model.licenseName}}"
+        />
+      </a>
+      {{link-to model.title 'file' model.uploader model.id}} by {{link-to model.content.user_real_name "user" model.uploader}}
+    </h2>
+    {{#if model.isPlaying}}{{playback-scrubber media=model.media}}{{/if}}
+  </div>
+  <div class="row">
+    <div class='col-md-3'>
+      <div class='left-column'>
+      <div class='well license attribution'>
+        <h6>Attribution</h6>
+        <p>
+          {{link-to model.title 'file' model}}<br/>
+          by {{model.content.user_real_name}}
+          {{#if model.content.upload_extra.featuring}}
+            <br/>featuring {{model.content.upload_extra.featuring}}
+          {{/if}}
+        </p>
+        <p class='url'><a {{bind-attr href=model.content.file_page_url}}>{{model.displayUrl}}</a></p>
+        <p>CC <a class='license' target='_new' href='{{unbound model.content.license_url}}'>{{model.licenseName}}</a></p>
+      </div>
+      <div class='well downloads'>
+        <a href="http://www.defectivebydesign.org/drm-free" class='pull-right'>
+          <img src="https://static.fsf.org/dbd/label/DRM-free label dropshadow 125.en.png"
+          alt="DefectiveByDesign.org"
+          width="50" height="50" border="0" align="middle" /></a>
+        <ul class='downloads'>
+        {{#each file in model.content.files}}
+          <li class='download'>
+            <a href='{{unbound file.download_url}}' download='{{unbound file.file_name}}'>{{file.file_nicname}} {{file.file_filesize}}</a>
+          </li>
+        {{/each}}
+        </ul>
+        <div class='clearfix'></div>
+      </div>
+      {{#if model.isLicenseReady}}
+        <a  class='buy-license btn'
+            title="Obtain Commercial License"
+            target='_new' href='{{unbound model.purchaseLicenseUrl}}'>
+          <span class='glyphicon glyphicon-usd'></span> Obtain Commercial License
+        </a>
+        <div class='clearfix'></div>
+      {{/if}}
+      <a
+        href='{{unbound model.content.file_page_url}}'
+        target="_new"
+        class='btn info'><span class="glyphicon glyphicon-info-sign"></span> View on ccMixter</a>
+
+      <a href="http://ccmixter.org/share/{{unbound model.id}}"><img src="http://ccmixter.org/ccskins/shared/images/share-link.gif" alt="Share"/></a>
+      </div>
+    </div><div class="col-md-6">
+      <div class='well description'>
+        {{#if model.content.user_avatar_url}}
+          {{#link-to 'user' model.uploader class='pull-right'}}
+            <img class='avatar' {{bind-attr src=model.content.user_avatar_url alt=model.content.user_real_name}}/>
+          {{/link-to}}
+        {{/if}}
+        {{{model.content.upload_description_html}}}
+
+        <div class='date'>{{model.content.upload_date}}</div>
+        <div class='clearfix'></div>
+      </div>
+
+
+      <h4 class='stats'>
+        {{#if model.ccc.username}}
+        {{#unless model.isOwnUpload}}
+        {{#unless model.isRecommended}}
+        <a {{action recommend model.upload_id bubbles=false}} href='#'
+            title="Recommend on ccMixter"
+            class="btn recommend glyphicon glyphicon-thumbs-up"></a>
+        {{/unless}}
+        {{/unless}}
+        {{/if}}
+
+        {{#if model.content.upload_num_scores}}
+          {{model.content.upload_num_scores}} Recommends
+        {{/if}}
+        {{#if model.content.upload_extra.num_reviews}}
+          {{model.content.upload_extra.num_reviews}} Reviews
+        {{/if}}
+        {{#if model.content.upload_num_playlists}}
+          Found in {{model.content.upload_num_playlists}} Playlists
+        {{/if}}
+      </h4>
+      {{#if model.reviews.length}}
+        <ul class='reviews'>
+        {{#each review in model.reviews}}
+          <li class='well review'>
+            <blockquote>{{{review.topic_text_html}}}</blockquote>
+            Review by {{link-to review.user_real_name 'user' review.user_real_name}} @ <span class='date'>{{review.rss_pubdate}}</span>
+          </li>
+        {{/each}}
+        </ul>
+      {{/if}}
+    </div><div class='col-md-3'>
+      <div class='well tags'>
+      {{#if model.content.upload_extra.bpm}}
+        <div class='bpm'>BPM: <span>{{model.content.upload_extra.bpm}}</span></div>
+      {{/if}}
+      {{#each tagItem in model.content.upload_taglinks}}
+        {{link-to tagItem.tag "tags" tagItem.tag}}
+      {{/each}}
+      </div>
+
+      {{#if model.content.remix_parents.length}}
+        <div class='well'>
+          <span>Uses samples from:</span>
+          <ul class='remix-parents'>
+          {{#each parent in model.content.remix_parents}}
+            <li class='remix-parent'>
+              {{link-to parent.upload_name 'file' parent.user_name parent.upload_id class='upload'}}
+              by
+              {{link-to parent.user_real_name 'user' parent.user_name class='user'}}
+            </li>
+          {{/each}}
+          </ul>
+        </div>
+      {{/if}}
+      {{#if model.content.remix_children.length}}
+        <div class='well'>
+          <span>Samples are used in:</span>
+          <ul class='remix-children'>
+          {{#each child in model.content.remix_children}}
+            <li class='remix-child'>
+              {{link-to child.upload_name 'file' child.user_name child.upload_id class='upload'}}
+              by
+              {{link-to child.user_real_name 'user' child.user_name class='user'}}
+            </li>
+          {{/each}}
+          </ul>
+        </div>
+      {{/if}}
+    </div>
+  </div>
+</article>

@@ -1,0 +1,46 @@
+<article {{bind-attr class=":upload item.isPlaying"}}>
+  <div class='btn-group pull-left'>
+    <a href='#' {{action 'playPrevious'}} class='btn play-previous'><span class="glyphicon glyphicon-backward"></span></a>
+    <a href='#' class='btn play' {{action 'togglePlay'}}>
+      <span {{bind-attr class=":glyphicon item.isPlaying:glyphicon-pause:glyphicon-play"}}></span>
+    </a>
+    <a href='#' {{action 'playNext'}} class='btn play-next'><span class="glyphicon glyphicon-forward"></span></a>
+
+    {{#link-to 'file' item.uploader item.id class='btn info' bubbles=false}}
+      <span class="glyphicon glyphicon-info-sign"></span>
+    {{/link-to}}
+  </div>
+  <div class='media-body'>
+    {{#if item.isLicenseReady}}
+      <a  class='buy-license pull-right btn btn-default'
+          title="Obtain Commercial License"
+          target='_new' href='{{unbound item.purchaseLicenseUrl}}'>
+        <span class='glyphicon glyphicon-usd'></span>
+      </a>
+    {{/if}}
+    <a class='license pull-right' target='_new' href='{{unbound item.contentlicense_url}}'><img
+      src="{{unbound item.licenseLogoUrl}}"
+      alt="{{unbound item.licenseName}}"
+      title="{{unbound item.licenseName}}"
+    /></a>
+    <h4 class='media-heading'>{{link-to item.title 'file' item.uploader item.id bubbles=false}}</h4>
+    <div class='attribution'>
+      by {{#link-to 'user' item.uploader class='user' bubbles=false}}{{item.uploader}}{{/link-to}}
+    </div>
+    {{#if ccc.username}}
+    {{#unless item.isOwnUpload}}
+    {{#unless item.isRecommended}}
+    <a {{action recommend upload_id bubbles=false}} href='#'
+        title="Recommend on ccMixter"
+        class="btn recommend glyphicon glyphicon-thumbs-up"></a>
+    {{/unless}}
+    {{/unless}}
+    {{/if}}
+
+    {{#if item.isPlaying}}
+      {{playback-scrubber media=item.media classNames="pull-left" bubbles=false}}
+    {{/if}}
+    <div class='clearfix'></div>
+  </div>
+  <div class='clearfix'></div>
+</article>

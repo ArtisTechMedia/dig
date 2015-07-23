@@ -19,5 +19,19 @@ module.exports = function(defaults) {
   // please specify an object with the list of modules as keys
   // along with the exports of each module as its value.
 
+  app.import({
+    development: 'bower_components/soundmanager/swf/soundmanager2_debug.swf',
+    production: 'bower_components/soundmanager/swf/soundmanager2.swf'
+  });
+  app.import({
+    development: 'bower_components/soundmanager/script/soundmanager2.js',
+    production: 'bower_components/soundmanager/script/soundmanager2-nodebug-jsmin.js'
+  });
+  app.import('bower_components/ember-cli-soundmanager-shim/soundmanager2-shim.js', {
+    exports: {
+      soundManager: ['default']
+    }
+  });
+
   return app.toTree();
 };

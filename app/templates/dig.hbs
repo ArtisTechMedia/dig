@@ -1,0 +1,12 @@
+<article class='container uploads'>
+  {{dig-bar}}
+  {{uploads-playlist uploads=model}}
+  <ul class="pager">
+  {{#if offset}}
+    <li>{{link-to '← Previous' (query-params offset=previousOffset)}}</li>
+  {{/if}}
+  {{#if nextOffset}}
+    <li>{{link-to 'Next →' (query-params offset=nextOffset)}}</li>
+  {{/if}}
+  </ul>
+</article>
